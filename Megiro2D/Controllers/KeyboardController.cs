@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Megiro2D.Delegates;
+using OpenTK;
 using OpenTK.Input;
 
 namespace Megiro2D.Controllers
@@ -11,10 +12,9 @@ namespace Megiro2D.Controllers
         public bool Shift { get; private set; }
         public bool IsRepeat { get; private set; }
 
-        public event Key KeyDown;
-        public event Key KeyPress;
-        public event Key KeyUp;
-        public delegate void Key(char key);
+        public event KeyDelegate KeyDown;
+        public event KeyDelegate KeyPress;
+        public event KeyDelegate KeyUp;
 
         public void OnKeyDown(object o, KeyboardKeyEventArgs e)
         {
