@@ -1,6 +1,5 @@
 ﻿using Megiro2D;
 using System;
-using Megiro2D.Delegates;
 using System.Threading;
 using Megiro2D.Controllers;
 
@@ -14,12 +13,23 @@ namespace DebugConsole
         {
             Thread mainThread = new Thread(new ThreadStart(Initialize));
             mainThread.Start();
-            Thread.Sleep(1000);
             KeyboardController.Singleton.KeyPress += OnKeyPress;
             WindowController.Singleton.Closing += OnClosing;
 
+            DebugMethod();
+
             Console.ReadKey();
             core.Exit();
+        }
+
+        private void DebugMethod()
+        {
+            TestObject o = new TestObject();
+            o.RotationSpeed = 45;
+            o.Transform.Position = new Vector3D(2.5f, 0, 0);
+
+            TestObject n = new TestObject();
+            n.Transform.Position = new Vector3D(-2.5f, 0, 0);
         }
 
         private void OnClosing()

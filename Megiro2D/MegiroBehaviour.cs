@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Megiro2D
+﻿namespace Megiro2D
 {
-    class MegiroBehaviour
+    public class MegiroBehaviour : GameObject
     {
+        public MegiroBehaviour()
+        {
+            Megiro.Singleton.AddBehaviour(this);
+        }
+
+        public virtual void Start()
+        {
+
+        }
+
+        public virtual void Update(double time)
+        {
+
+        }
     }
 }

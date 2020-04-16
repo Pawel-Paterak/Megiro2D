@@ -4,13 +4,9 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Megiro2D
 {
@@ -19,34 +15,35 @@ namespace Megiro2D
         public KeyboardController KeyboardController { get; private set; } = new KeyboardController();
         public WindowController WindowController { get; private set; } = new WindowController();
 
-        const float rotation_speed = 180.0f;
-        private float angle;
+        const int num_lists = 13;
+        int[] lists = new int[num_lists];
+
 
         public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) { }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
             base.OnKeyDown(e);
-            KeyboardController.OnKeyDown(e);
+            KeyboardController.Singleton.OnKeyDown(e);
         }
 
-        protected override void OnKeyPress(KeyPressEventArgs e)
+        protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
-            KeyboardController.OnKeyPress(e);
+            KeyboardController.Singleton.OnKeyPress(e);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)
         {
             base.OnKeyUp(e);
-            KeyboardController.OnKeyUp(e);
+            KeyboardController.Singleton.OnKeyUp(e);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            WindowController.OnLoad(e);
+            WindowController.Singleton.OnLoad(e);
 
             GL.ClearColor(Color.Black);
             GL.Enable(EnableCap.DepthTest);
@@ -56,7 +53,7 @@ namespace Megiro2D
         {
             base.OnResize(e);
 
-            WindowController.OnResize(e);
+            WindowController.Singleton.OnResize(e);
 
             GL.Viewport(0, 0, Width, Height);
             double aspect_ratio = Width / (double)Height;
@@ -69,7 +66,8 @@ namespace Megiro2D
         {
             base.OnUpdateFrame(e);
 
-            WindowController.OnUpdateFrame(e);
+            WindowController.Singleton.OnUpdateFrame(e);
+
 
             var keyboard = Keyboard.GetState();
             if (keyboard[Key.Escape])
@@ -80,18 +78,13 @@ namespace Megiro2D
         {
             base.OnRenderFrame(e);
 
-            WindowController.OnRenderFrame(e);
-
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
 
-            angle += rotation_speed * (float)e.Time;
-            GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
-
-            DrawCube();
+            WindowController.Singleton.OnRenderFrame(e);
 
             this.SwapBuffers();
             Thread.Sleep(1);
@@ -101,51 +94,7 @@ namespace Megiro2D
         {
             base.OnClosing(e);
 
-            WindowController.OnClosing();
-        }
-
-        private void DrawCube()
-        {
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.Color3(Color.Red);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-            GL.Color3(Color.Green);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-
-            GL.Color3(Color.Blue);
-
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.Orange);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-
-            GL.Color3(Color.Pink);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.White);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-            GL.End();
+            WindowController.Singleton.OnClosing();
         }
     }
 }

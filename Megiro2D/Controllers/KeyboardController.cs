@@ -2,7 +2,6 @@
 using OpenTK;
 using OpenTK.Input;
 using System;
-using System.Windows.Forms;
 
 namespace Megiro2D.Controllers
 {
@@ -35,14 +34,14 @@ namespace Megiro2D.Controllers
                 Control = e.Control;
                 Shift = e.Shift;
                 IsRepeat = e.IsRepeat;
-                Singleton.KeyDown?.Invoke(e.Key.ToString()[0]);
+                KeyDown?.Invoke(e.Key.ToString()[0]);
             }
         }
 
-        public void OnKeyPress(OpenTK.KeyPressEventArgs e)
+        public void OnKeyPress(KeyPressEventArgs e)
         {
             if(IsSingleton())
-                Singleton.KeyPress?.Invoke(e.KeyChar);
+                KeyPress?.Invoke(e.KeyChar);
         }
 
         public void OnKeyUp(KeyboardKeyEventArgs e)
@@ -54,7 +53,7 @@ namespace Megiro2D.Controllers
                 Control = e.Control;
                 Shift = e.Shift;
                 IsRepeat = e.IsRepeat;
-                Singleton.KeyUp?.Invoke(e.Key.ToString()[0]);
+                KeyUp?.Invoke(e.Key.ToString()[0]);
             }
         }
 

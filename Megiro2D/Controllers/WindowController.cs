@@ -25,31 +25,31 @@ namespace Megiro2D.Controllers
         public void OnLoad(EventArgs e)
         {
             if(IsSingleton())
-                Singleton.Load?.Invoke();
+                Load?.Invoke();
         }
 
         public void OnResize(EventArgs e)
         {
             if (IsSingleton())
-                Singleton.Resize?.Invoke();
+                Resize?.Invoke();
         }
 
         public void OnUpdateFrame(FrameEventArgs e)
         {
             if (IsSingleton())
-                Singleton.UpdateFrame?.Invoke(e);
+                UpdateFrame?.Invoke(e.Time);
         }
 
         public void OnRenderFrame(FrameEventArgs e)
         {
             if (IsSingleton())
-                Singleton.RenderFrame?.Invoke(e);
+                RenderFrame?.Invoke(e.Time);
         }
 
         public void OnClosing()
         {
             if (IsSingleton())
-                Singleton.Closing?.Invoke();
+                Closing?.Invoke();
         }
 
         private bool IsSingleton()

@@ -10,7 +10,7 @@ namespace DebugConsole
     {
         static void Main(string[] args)
         {
-            Core core = new Core();
+            Debug core = new Debug();
             core.Start();
         }
     }
