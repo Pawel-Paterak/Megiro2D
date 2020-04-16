@@ -1,6 +1,8 @@
 ﻿using Megiro2D.Delegates;
 using OpenTK;
 using OpenTK.Input;
+using System;
+using System.Windows.Forms;
 
 namespace Megiro2D.Controllers
 {
@@ -16,27 +18,51 @@ namespace Megiro2D.Controllers
         public event KeyDelegate KeyPress;
         public event KeyDelegate KeyUp;
 
-        public void OnKeyDown(object o, KeyboardKeyEventArgs e)
+        public static KeyboardController Singleton;
+
+        public KeyboardController()
         {
-            Alt = e.Alt;
-            Command = e.Command;
-            Control = e.Control;
-            Shift = e.Shift;
-            IsRepeat = e.IsRepeat;
-            KeyDown?.Invoke(e.Key.ToString()[0]);
+            if (Singleton == null)
+                Singleton = this;
         }
 
-        public void OnKeyPress(object o, KeyPressEventArgs e)
-            => KeyPress?.Invoke(e.KeyChar);
-
-        public void OnKeyUp(object o, KeyboardKeyEventArgs e)
+        public void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            Alt = e.Alt;
-            Command = e.Command;
-            Control = e.Control;
-            Shift = e.Shift;
-            IsRepeat = e.IsRepeat;
-            KeyUp?.Invoke(e.Key.ToString()[0]);
+            if (IsSingleton())
+            {
+                Alt = e.Alt;
+                Command = e.Command;
+                Control = e.Control;
+                Shift = e.Shift;
+                IsRepeat = e.IsRepeat;
+                Singleton.KeyDown?.Invoke(e.Key.ToString()[0]);
+            }
+        }
+
+        public void OnKeyPress(OpenTK.KeyPressEventArgs e)
+        {
+            if(IsSingleton())
+                Singleton.KeyPress?.Invoke(e.KeyChar);
+        }
+
+        public void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            if (IsSingleton())
+            {
+                Alt = e.Alt;
+                Command = e.Command;
+                Control = e.Control;
+                Shift = e.Shift;
+                IsRepeat = e.IsRepeat;
+                Singleton.KeyUp?.Invoke(e.Key.ToString()[0]);
+            }
+        }
+
+        private bool IsSingleton()
+        {
+            if (Singleton != this)
+                throw new Exception("you can't call this method, you can call this method only in Singleton");
+            return true;
         }
     }
 }

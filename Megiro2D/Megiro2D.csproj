@@ -36,6 +36,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,9 +48,12 @@
   <ItemGroup>
     <Compile Include="Controllers\KeyboardController.cs" />
     <Compile Include="Controllers\WindowController.cs" />
+    <Compile Include="Delegates\DelegateFrame.cs" />
     <Compile Include="Delegates\KeyDelegate.cs" />
     <Compile Include="Megiro.cs" />
+    <Compile Include="MegiroBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

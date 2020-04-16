@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Megiro2D.Delegates;
+using OpenTK;
+using System;
 
 namespace Megiro2D.Controllers
 {
@@ -10,21 +8,55 @@ namespace Megiro2D.Controllers
     {
         public event DelegateWindow Load;
         public event DelegateWindow Resize;
-        public event DelegateWindow UpdateFrame;
-        public event DelegateWindow RenderFrame;
+        public event DelegateFrame UpdateFrame;
+        public event DelegateFrame RenderFrame;
+        public event DelegateWindow Closing;
 
         public delegate void DelegateWindow();
 
-        public void OnLoad(object o, EventArgs e)
-           => Load?.Invoke();
+        public static WindowController Singleton;
 
-        public void OnResize(object o, EventArgs e)
-           => Resize?.Invoke();
+        public WindowController()
+        {
+            if (Singleton == null)
+                Singleton = this;
+        }
 
-        public void OnUpdateFrame(object o, EventArgs e)
-           => UpdateFrame?.Invoke();
+        public void OnLoad(EventArgs e)
+        {
+            if(IsSingleton())
+                Singleton.Load?.Invoke();
+        }
 
-        public void OnRenderFrame(object o, EventArgs e)
-           => RenderFrame?.Invoke();
+        public void OnResize(EventArgs e)
+        {
+            if (IsSingleton())
+                Singleton.Resize?.Invoke();
+        }
+
+        public void OnUpdateFrame(FrameEventArgs e)
+        {
+            if (IsSingleton())
+                Singleton.UpdateFrame?.Invoke(e);
+        }
+
+        public void OnRenderFrame(FrameEventArgs e)
+        {
+            if (IsSingleton())
+                Singleton.RenderFrame?.Invoke(e);
+        }
+
+        public void OnClosing()
+        {
+            if (IsSingleton())
+                Singleton.Closing?.Invoke();
+        }
+
+        private bool IsSingleton()
+        {
+            if (Singleton != this)
+                throw new Exception("you can't call this method, you can call this method only in Singleton");
+            return true;
+        }
     }
 }
