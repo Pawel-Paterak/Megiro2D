@@ -46,25 +46,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\KeyboardController.cs" />
+    <Compile Include="Controllers\Input.cs" />
+    <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Component.cs" />
     <Compile Include="Controllers\WindowController.cs" />
     <Compile Include="Delegates\DelegateFrame.cs" />
     <Compile Include="Delegates\KeyDelegate.cs" />
-    <Compile Include="GameObject.cs" />
+    <Compile Include="Engine\GameObject.cs" />
+    <Compile Include="Engine\Meshbatch.cs" />
+    <Compile Include="Engine\Texture2D.cs" />
     <Compile Include="Megiro.cs" />
     <Compile Include="MegiroBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render\Enums\PrimitiveType.cs" />
     <Compile Include="Render\Mesh.cs" />
     <Compile Include="Render\Renderer.cs" />
-    <Compile Include="Transform.cs" />
-    <Compile Include="Vector3D.cs" />
+    <Compile Include="Resources\ResourcesEngine.cs" />
+    <Compile Include="Engine\Transform.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

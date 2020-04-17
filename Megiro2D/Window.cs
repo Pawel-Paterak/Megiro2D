@@ -1,42 +1,31 @@
 ﻿using Megiro2D.Controllers;
+using Megiro2D.Engine;
+using Megiro2D.Resources;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Megiro2D
 {
     public class Window : GameWindow
     {
-        public KeyboardController KeyboardController { get; private set; } = new KeyboardController();
-        public WindowController WindowController { get; private set; } = new WindowController();
+        private Camera camera;
 
-        const int num_lists = 13;
-        int[] lists = new int[num_lists];
-
-
-        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) { }
-
-        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
-            base.OnKeyDown(e);
-            KeyboardController.Singleton.OnKeyDown(e);
-        }
+            GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.DepthTest);
 
-        protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
-        {
-            base.OnKeyPress(e);
-            KeyboardController.Singleton.OnKeyPress(e);
-        }
+            Input.Initialize(this);
 
-        protected override void OnKeyUp(KeyboardKeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-            KeyboardController.Singleton.OnKeyUp(e);
+            camera = new Camera();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -46,7 +35,6 @@ namespace Megiro2D
             WindowController.Singleton.OnLoad(e);
 
             GL.ClearColor(Color.Black);
-            GL.Enable(EnableCap.DepthTest);
         }
 
         protected override void OnResize(EventArgs e)
@@ -67,7 +55,7 @@ namespace Megiro2D
             base.OnUpdateFrame(e);
 
             WindowController.Singleton.OnUpdateFrame(e);
-
+            Input.Update();
 
             var keyboard = Keyboard.GetState();
             if (keyboard[Key.Escape])
@@ -80,14 +68,11 @@ namespace Megiro2D
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
+            camera.ApplyTransform(Width, Height);
 
             WindowController.Singleton.OnRenderFrame(e);
 
-            this.SwapBuffers();
-            Thread.Sleep(1);
+            SwapBuffers();
         }
 
         protected override void OnClosing(CancelEventArgs e)

@@ -13,7 +13,6 @@ namespace DebugConsole
         {
             Thread mainThread = new Thread(new ThreadStart(Initialize));
             mainThread.Start();
-            KeyboardController.Singleton.KeyPress += OnKeyPress;
             WindowController.Singleton.Closing += OnClosing;
 
             DebugMethod();
@@ -25,11 +24,7 @@ namespace DebugConsole
         private void DebugMethod()
         {
             TestObject o = new TestObject();
-            o.RotationSpeed = 45;
-            o.Transform.Position = new Vector3D(2.5f, 0, 0);
-
-            TestObject n = new TestObject();
-            n.Transform.Position = new Vector3D(-2.5f, 0, 0);
+            newTestObject n = new newTestObject();
         }
 
         private void OnClosing()
@@ -39,12 +34,7 @@ namespace DebugConsole
 
         private void Initialize()
         {
-            core.Start(500, 300, "Megiro", 1.0 / 60.0);
-        }
-
-        private void OnKeyPress(char key)
-        {
-            Console.Write(key);
+            core.Start(640, 480, "Megiro", 1.0 / 60.0);
         }
     }
 }
