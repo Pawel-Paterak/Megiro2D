@@ -10,7 +10,7 @@ namespace Megiro2D
         public static Megiro Singleton;
 
         private Window window;
-        private readonly List<Component> behaviours = new List<Component>();
+        public readonly List<Component> behaviours = new List<Component>();
 
         public Megiro()
         {
@@ -31,24 +31,21 @@ namespace Megiro2D
             window.Exit();
         }
 
-        public void AddBehaviour(Component component)
+        public void AddBehaviour(MegiroBehaviour behaviour)
         {
-            behaviours.Add(component);
+            behaviours.Add(behaviour);
 
-            component.Start();
-            WindowController.Singleton.UpdateFrame += component.Update;
-            Renderer renderer = component.gameObject.GetComponent<Renderer>();
-            if (renderer != null)
-                WindowController.Singleton.RenderFrame += renderer.Render;
+            behaviour.Start();
+            WindowController.Singleton.UpdateFrame += behaviour.Update;
         }
 
-        public void RemoveBehaviour(Component component)
+        public void RemoveBehaviour(MegiroBehaviour component)
         {
             if (behaviours.Contains(component))
             {
                 WindowController.Singleton.UpdateFrame -= component.Update;
-                Renderer renderer = component.renderer;
 
+                Renderer renderer = component.renderer;
                 if (renderer != null)
                     WindowController.Singleton.RenderFrame -= renderer.Render;
 

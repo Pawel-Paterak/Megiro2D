@@ -7,8 +7,9 @@ namespace Megiro2D.Engine
     {
         public static Camera camera;
 
-        public override void Start()
+        public Camera()
         {
+            Name = "Camera";
             if (camera == null)
                 camera = this;
         }

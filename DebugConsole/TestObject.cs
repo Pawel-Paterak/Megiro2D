@@ -12,7 +12,7 @@ namespace DebugConsole
 
         public override void Start()
         {
-
+            Name = "TestObject";
         }
 
         public override void Update(double time)
@@ -20,6 +20,11 @@ namespace DebugConsole
             transform.Rotation += RotationSpeed * new Vector3(0, (float)time, 0);
             if (renderer != null && renderer.Texture == null)
                 renderer.Texture = EngineResources.LoadTexture("GameIcon32x32.png");
+        }
+
+        public override void OnDestroy()
+        {
+            MessageBox.Show("Destroing: " +Name);
         }
     }
 }

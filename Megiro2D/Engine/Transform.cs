@@ -47,8 +47,8 @@ namespace Megiro2D.Engine
             }
         }
 
-        public Transform GetChild(int i)
-            => childs[i];
+        public Transform GetChild(int index)
+            => childs[index];
 
         public Transform FindChild(string name)
         {

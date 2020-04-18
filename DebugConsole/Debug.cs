@@ -15,17 +15,19 @@ namespace DebugConsole
         {
             Thread mainThread = new Thread(new ThreadStart(Initialize));
             mainThread.Start();
-            InitializeEvents();
+            WindowController.Singleton.Closing += OnClosing;
+
             DebugMethod();
+
+            do
+            {
+                Console.WriteLine("behaviours Count: " + core.behaviours.Count);
+            } while (true);
+
             Console.ReadKey();
             core.Exit();
         }
 
-        private void InitializeEvents()
-        {
-            WindowController.Singleton.Closing += OnClosing;
-            WindowController.Singleton.Load += DebugMethod;
-        }
 
         private void DebugMethod()
         {

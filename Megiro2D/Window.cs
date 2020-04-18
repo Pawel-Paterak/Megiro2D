@@ -7,7 +7,6 @@ using OpenTK.Input;
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Megiro2D
 {
@@ -49,9 +48,6 @@ namespace Megiro2D
             WindowController.Singleton.OnUpdateFrame(e);
 
             Input.Update();
-
-            if (Input.KeyDown(Key.Escape))
-                base.Exit();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

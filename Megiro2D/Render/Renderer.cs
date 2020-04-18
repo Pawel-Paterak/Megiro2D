@@ -1,4 +1,5 @@
-﻿using Megiro2D.Engine;
+﻿using Megiro2D.Controllers;
+using Megiro2D.Engine;
 using Megiro2D.Render.Enums;
 using System.Drawing;
 
@@ -11,6 +12,17 @@ namespace Megiro2D.Render
         public Color Color { get; set; } = Color.White;
         public Texture2D Texture { get; set; }
         public bool CanRender { get; set; } = true;
+
+        public Renderer()
+        {
+            Name = "Renderer";
+            WindowController.Singleton.RenderFrame += Render;
+        }
+
+        public override void OnDestroy()
+        {
+            WindowController.Singleton.RenderFrame -= Render;
+        }
 
         public void Render(double time)
         {

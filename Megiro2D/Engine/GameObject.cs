@@ -15,7 +15,6 @@ namespace Megiro2D.Engine
             component = (T)Activator.CreateInstance(typeof(T));
             component.gameObject = this;
             components.Add(component);
-            Megiro.Singleton.AddBehaviour(component);
 
             return (T)component;
         }
@@ -24,7 +23,6 @@ namespace Megiro2D.Engine
         {
             component.gameObject = this;
             components.Add(component);
-
             return component;
         }
 
@@ -34,6 +32,16 @@ namespace Megiro2D.Engine
                 if (component is T)
                     return component as T;
             return null;
+        }
+
+        public T[] GetComponents<T>() where T : Component
+        {
+            List<Component> components = new List<Component>();
+            foreach (Component component in this.components)
+                if (component is T)
+                    components.Add(component);
+
+            return components.ToArray() as T[];
         }
     }
 }

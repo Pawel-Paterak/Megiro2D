@@ -4,6 +4,7 @@ using Megiro2D.Engine;
 using Megiro2D.Render;
 using Megiro2D.Resources;
 using OpenTK;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,10 +12,12 @@ namespace DebugConsole
 {
     public class newTestObject : MegiroBehaviour
     {
-        public GameObject camera;
+        private List<GameObject> gameObjects = new List<GameObject>();
+        private GameObject camera;
 
         public override void Start()
         {
+            Name = "newTestObject";
             transform.Position = new Vector3(0, 2, 0);
             AddComponent<Renderer>();
             camera = Instantiate(transform.Position + new Vector3(0, 0, 10), new Vector3(0, 0, 0), transform);
@@ -25,11 +28,14 @@ namespace DebugConsole
         {
             if(Input.KeyPress(OpenTK.Input.Key.L))
             {
-                Instantiate(new Vector3(0, 0, 0), new Vector3(0, 0, 0), transform).AddComponent<Renderer>()
-                    .AddComponent<TestObject>()
-                    .RotationSpeed = new Vector3(0, 10 * (transform.ChildCount + 1), 0);
+                MessageBox.Show("clicked L");
             }
 
+            if (Input.KeyRelease(OpenTK.Input.Key.K))
+            {
+                MessageBox.Show("clicked K");
+
+            }
 
             Move(time);
             if (renderer.Texture == null)
@@ -94,7 +100,8 @@ namespace DebugConsole
             if (Input.KeyDown(OpenTK.Input.Key.ControlRight))
                 offset += new Vector3(0, -10 * (float)time, 0);
 
-            camera.transform.Position += offset;
+            if(camera != null)
+                camera.transform.Position += offset;
         }
     }
 }

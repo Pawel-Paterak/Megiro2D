@@ -1,10 +1,12 @@
 ﻿using Megiro2D.Engine;
 using OpenTK;
+using System.Windows.Forms;
 
 namespace Megiro2D
 {
     public class MegiroBehaviour : Component
     {
+        public string Name { get => base.Name; set { gameObject.Name = value; base.Name = value; } }
         public GameObject gameObject { get; set; } = new GameObject();
 
         public MegiroBehaviour()
@@ -18,20 +20,31 @@ namespace Megiro2D
                 Initialize();
         }
 
+        public virtual void Start()
+        {
+
+        }
+
+        public virtual void Update(double time)
+        {
+
+        }
+
         public GameObject Instantiate(Vector3 position, Vector3 rotation)
             => Instantiate(position, rotation, null);
 
         public GameObject Instantiate(Vector3 position, Vector3 rotation, Transform parent)
         {
-            MegiroBehaviour behaviour = new MegiroBehaviour();
-            behaviour.gameObject.transform.Position = position;
-            behaviour.gameObject.transform.Rotation = rotation;
-            behaviour.gameObject.transform.Parent = parent;
-            return behaviour.gameObject;
+            GameObject gameobject = new GameObject();
+            gameobject.transform.Position = position;
+            gameobject.transform.Rotation = rotation;
+            gameobject.transform.Parent = parent;
+            return gameobject;
         }
 
         private void Initialize()
         {
+            Name = "Behaviour";
             base.gameObject = gameObject;
             AddComponent(this);
             Megiro.Singleton.AddBehaviour(this);
