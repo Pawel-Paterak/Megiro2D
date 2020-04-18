@@ -52,6 +52,7 @@
     <Compile Include="Controllers\WindowController.cs" />
     <Compile Include="Delegates\DelegateFrame.cs" />
     <Compile Include="Delegates\KeyDelegate.cs" />
+    <Compile Include="Engine\EngineObject.cs" />
     <Compile Include="Engine\GameObject.cs" />
     <Compile Include="Engine\Meshbatch.cs" />
     <Compile Include="Engine\Texture2D.cs" />

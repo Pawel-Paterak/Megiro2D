@@ -11,48 +11,23 @@ namespace Megiro2D.Render
         public Mesh()
         {
             Vertices = new Vector3[8];
-            Coords2d = new Vector2[24];
+            Coords2d = new Vector2[4];
             VerticesNumber = new int[24];
 
-            Vertices[0] = new Vector3(-1.0f, -1.0f, -1.0f);
-            Vertices[1] = new Vector3(-1.0f, 1.0f, -1.0f);
-            Vertices[2] = new Vector3(1.0f, 1.0f, -1.0f);
-            Vertices[3] = new Vector3(1.0f, -1.0f, -1.0f);
+            Vertices[0] = new Vector3(-0.5f, -0.5f, -0.5f);
+            Vertices[1] = new Vector3(-0.5f, 0.5f, -0.5f);
+            Vertices[2] = new Vector3(0.5f, 0.5f, -0.5f);
+            Vertices[3] = new Vector3(0.5f, -0.5f, -0.5f);
 
-            Vertices[4] = new Vector3(1.0f, -1.0f, 1.0f);
-            Vertices[5] = new Vector3(-1.0f, -1.0f, 1.0f);
-            Vertices[6] = new Vector3(-1.0f, 1.0f, 1.0f);
-            Vertices[7] = new Vector3(1.0f, 1.0f, 1.0f);
+            Vertices[4] = new Vector3(0.5f, -0.5f, 0.5f);
+            Vertices[5] = new Vector3(-0.5f, -0.5f, 0.5f);
+            Vertices[6] = new Vector3(-0.5f, 0.5f, 0.5f);
+            Vertices[7] = new Vector3(0.5f, 0.5f, 0.5f);
 
             Coords2d[0] = new Vector2(0, 0);
             Coords2d[1] = new Vector2(1, 0);
             Coords2d[2] = new Vector2(1, 1);
             Coords2d[3] = new Vector2(0, 1);
-
-            Coords2d[4] = new Vector2(0, 0);
-            Coords2d[5] = new Vector2(1, 0);
-            Coords2d[6] = new Vector2(1, 1);
-            Coords2d[7] = new Vector2(0, 1);
-
-            Coords2d[8] = new Vector2(0, 0);
-            Coords2d[9] = new Vector2(1, 0);
-            Coords2d[10] = new Vector2(1, 1);
-            Coords2d[11] = new Vector2(0, 1);
-
-            Coords2d[12] = new Vector2(0, 0);
-            Coords2d[13] = new Vector2(1, 0);
-            Coords2d[14] = new Vector2(1, 1);
-            Coords2d[15] = new Vector2(0, 1);
-
-            Coords2d[16] = new Vector2(0, 0);
-            Coords2d[17] = new Vector2(1, 0);
-            Coords2d[18] = new Vector2(1, 1);
-            Coords2d[19] = new Vector2(0, 1);
-
-            Coords2d[20] = new Vector2(0, 0);
-            Coords2d[21] = new Vector2(1, 0);
-            Coords2d[22] = new Vector2(1, 1);
-            Coords2d[23] = new Vector2(0, 1);
 
             VerticesNumber[0] = 1;
             VerticesNumber[1] = 2;
@@ -83,6 +58,33 @@ namespace Megiro2D.Render
             VerticesNumber[21] = 7;
             VerticesNumber[22] = 4;
             VerticesNumber[23] = 3;
+        }
+
+        public static Mesh Plane()
+        {
+            Mesh mesh = new Mesh();
+
+            mesh.Vertices = new Vector3[4];
+            mesh.Coords2d = new Vector2[4];
+            mesh.VerticesNumber = new int[4];
+
+            mesh.Vertices[0] = new Vector3(1, 0, 1);
+            mesh.Vertices[1] = new Vector3(-1, 0, 1);
+            mesh.Vertices[2] = new Vector3(1, 0, -1);
+            mesh.Vertices[3] = new Vector3(-1, 0, -1);
+
+
+            mesh.Coords2d[0] = new Vector2(0, 0);
+            mesh.Coords2d[1] = new Vector2(1, 0);
+            mesh.Coords2d[2] = new Vector2(1, 1);
+            mesh.Coords2d[3] = new Vector2(0, 1);
+
+            mesh.VerticesNumber[0] = 3;
+            mesh.VerticesNumber[1] = 1;
+            mesh.VerticesNumber[2] = 0;
+            mesh.VerticesNumber[3] = 2;
+
+            return mesh;
         }
     }
 }

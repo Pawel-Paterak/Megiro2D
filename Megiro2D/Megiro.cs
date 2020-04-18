@@ -1,8 +1,7 @@
 ﻿using Megiro2D.Controllers;
 using Megiro2D.Engine;
-using Megiro2D.Resources;
+using Megiro2D.Render;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Megiro2D
 {
@@ -19,7 +18,6 @@ namespace Megiro2D
                 Singleton = this;
 
             new WindowController();
-            new ResourcesEngine();
         }
 
         public void Start(int width, int height, string title, double updateRatio)
@@ -36,20 +34,25 @@ namespace Megiro2D
         public void AddBehaviour(Component component)
         {
             behaviours.Add(component);
+
             component.Start();
             WindowController.Singleton.UpdateFrame += component.Update;
-            MegiroBehaviour behaviour = (component as MegiroBehaviour);
-            if (behaviour != null)
-                WindowController.Singleton.RenderFrame += behaviour.Render;
+            Renderer renderer = component.gameObject.GetComponent<Renderer>();
+            if (renderer != null)
+                WindowController.Singleton.RenderFrame += renderer.Render;
         }
 
-        public void RemoveBehaviour(MegiroBehaviour behaviour)
+        public void RemoveBehaviour(Component component)
         {
-            if (behaviours.Contains(behaviour))
+            if (behaviours.Contains(component))
             {
-                WindowController.Singleton.UpdateFrame -= behaviour.Update;
-                WindowController.Singleton.RenderFrame -= behaviour.Render;
-                behaviours.Remove(behaviour);
+                WindowController.Singleton.UpdateFrame -= component.Update;
+                Renderer renderer = component.renderer;
+
+                if (renderer != null)
+                    WindowController.Singleton.RenderFrame -= renderer.Render;
+
+                behaviours.Remove(component);
             }
         }
     }

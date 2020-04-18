@@ -2,6 +2,8 @@
 using System;
 using System.Threading;
 using Megiro2D.Controllers;
+using Megiro2D.Render;
+using OpenTK;
 
 namespace DebugConsole
 {
@@ -13,17 +15,22 @@ namespace DebugConsole
         {
             Thread mainThread = new Thread(new ThreadStart(Initialize));
             mainThread.Start();
-            WindowController.Singleton.Closing += OnClosing;
-
+            InitializeEvents();
             DebugMethod();
-
             Console.ReadKey();
             core.Exit();
         }
 
+        private void InitializeEvents()
+        {
+            WindowController.Singleton.Closing += OnClosing;
+            WindowController.Singleton.Load += DebugMethod;
+        }
+
         private void DebugMethod()
         {
-            TestObject o = new TestObject();
+            Ground ground = new Ground();
+            //new TestObject().AddComponent<Renderer>();
             newTestObject n = new newTestObject();
         }
 

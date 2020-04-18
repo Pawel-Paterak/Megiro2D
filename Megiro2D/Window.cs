@@ -1,31 +1,23 @@
 ﻿using Megiro2D.Controllers;
 using Megiro2D.Engine;
-using Megiro2D.Resources;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Megiro2D
 {
     public class Window : GameWindow
     {
-        private Camera camera;
-
         public Window(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.DepthTest);
-
             Input.Initialize(this);
-
-            camera = new Camera();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -45,7 +37,7 @@ namespace Megiro2D
 
             GL.Viewport(0, 0, Width, Height);
             double aspect_ratio = Width / (double)Height;
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)aspect_ratio, 1, 64);
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)aspect_ratio, 1, 150);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref perspective);
         }
@@ -55,10 +47,10 @@ namespace Megiro2D
             base.OnUpdateFrame(e);
 
             WindowController.Singleton.OnUpdateFrame(e);
+
             Input.Update();
 
-            var keyboard = Keyboard.GetState();
-            if (keyboard[Key.Escape])
+            if (Input.KeyDown(Key.Escape))
                 base.Exit();
         }
 
@@ -68,7 +60,10 @@ namespace Megiro2D
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            camera.ApplyTransform(Width, Height);
+            if (Camera.camera == null)
+                return;
+
+            Camera.camera.ApplyTransform(Width, Height);
 
             WindowController.Singleton.OnRenderFrame(e);
 

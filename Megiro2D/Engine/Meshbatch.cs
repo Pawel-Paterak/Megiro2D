@@ -19,14 +19,22 @@ namespace Megiro2D.Engine
 
             GL.Begin(PrimitiveType.Quads);
 
+            if (color != Color.Empty)
+                GL.Color3(color);
+
             for (int i = 0; i < mesh.VerticesNumber.Length; i++)
             {
                 Vector3 vertex = mesh.Vertices[mesh.VerticesNumber[i]] * scale;
-                GL.TexCoord2(mesh.Coords2d[i]);
+                GL.TexCoord2(mesh.Coords2d[i % mesh.Coords2d.Length]);
                 GL.Vertex3(vertex);
             }
 
+            GL.Color3(Color.White);
+
             GL.End();
+
+            if (texture != null)
+                GL.BindTexture(TextureTarget.Texture2D, 0);
 
             GL.Rotate(-rotation.Z, 0, 0, 1);
             GL.Rotate(-rotation.Y, 0, 1, 0);

@@ -1,34 +1,40 @@
 ﻿using Megiro2D.Engine;
-using Megiro2D.Render;
-using Megiro2D.Resources;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System.Drawing;
 
 namespace Megiro2D
 {
     public class MegiroBehaviour : Component
     {
-        public Renderer Renderer { get; set; } = new Renderer();
+        public GameObject gameObject { get; set; } = new GameObject();
 
         public MegiroBehaviour()
         {
-            parent = this;
+            Initialize();
+        }
+
+        public MegiroBehaviour(bool initialize)
+        {
+            if (initialize)
+                Initialize();
+        }
+
+        public GameObject Instantiate(Vector3 position, Vector3 rotation)
+            => Instantiate(position, rotation, null);
+
+        public GameObject Instantiate(Vector3 position, Vector3 rotation, Transform parent)
+        {
+            MegiroBehaviour behaviour = new MegiroBehaviour();
+            behaviour.gameObject.transform.Position = position;
+            behaviour.gameObject.transform.Rotation = rotation;
+            behaviour.gameObject.transform.Parent = parent;
+            return behaviour.gameObject;
+        }
+
+        private void Initialize()
+        {
+            base.gameObject = gameObject;
             AddComponent(this);
             Megiro.Singleton.AddBehaviour(this);
-        }
-
-        public virtual void RenderPrefix()
-        {
-
-        }
-
-        public void Render(double time)
-        {
-            RenderPrefix();
-
-            if(Renderer.Render)
-                Meshbatch.Draw(Renderer.Mesh, Renderer.Texture, gameObject.transform.Position, gameObject.transform.Rotation, gameObject.transform.Scale, Renderer.Color);
         }
     }
 }

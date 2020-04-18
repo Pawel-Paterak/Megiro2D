@@ -1,40 +1,16 @@
-﻿using Megiro2D.Controllers;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using System;
-using System.Windows.Forms;
 
 namespace Megiro2D.Engine
 {
-    public class Camera : MegiroBehaviour
+    public class Camera : Component
     {
+        public static Camera camera;
 
         public override void Start()
         {
-            Renderer.Render = false;
-            gameObject.transform.Position = new Vector3(0, 0, 5);
-            gameObject.transform.Rotation = new Vector3(0, 0, 0);
-        }
-
-        public override void Update(double time)
-        {
-            if (Input.KeyDown(OpenTK.Input.Key.Q))
-                gameObject.transform.Rotation += new Vector3(0, -1 * (float)time, 0);
-            if (Input.KeyDown(OpenTK.Input.Key.E))
-                gameObject.transform.Rotation += new Vector3(0, 1 * (float)time, 0);
-
-            if (Input.KeyDown(OpenTK.Input.Key.W))
-                gameObject.transform.Position += new Vector3(0, 0, -10 * (float)time);
-            if (Input.KeyDown(OpenTK.Input.Key.S))
-                gameObject.transform.Position += new Vector3(0, 0, 10 * (float)time);
-            if (Input.KeyDown(OpenTK.Input.Key.A))
-                gameObject.transform.Position += new Vector3(-10 * (float)time, 0, 0);
-            if (Input.KeyDown(OpenTK.Input.Key.D))
-                gameObject.transform.Position += new Vector3(10 * (float)time, 0, 0);
-            if (Input.KeyDown(OpenTK.Input.Key.Space))
-                gameObject.transform.Position += new Vector3(0, 10 * (float)time, 0);
-            if (Input.KeyDown(OpenTK.Input.Key.ShiftLeft))
-                gameObject.transform.Position += new Vector3(0, -10 * (float)time, 0);
+            if (camera == null)
+                camera = this;
         }
 
         public void ApplyTransform(int width, int height)
