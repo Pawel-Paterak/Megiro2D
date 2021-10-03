@@ -8,8 +8,9 @@ namespace Megiro2D.Controllers
     {
         public event DelegateWindow Load;
         public event DelegateWindow Resize;
-        public event DelegateFrame UpdateFrame;
-        public event DelegateFrame RenderFrame;
+        public event DelegateWindow StartFrame;
+        public event DelegateWindow UpdateFrame;
+        public event DelegateWindow RenderFrame;
         public event DelegateWindow Closing;
 
         public delegate void DelegateWindow();
@@ -37,13 +38,17 @@ namespace Megiro2D.Controllers
         public void OnUpdateFrame(FrameEventArgs e)
         {
             if (IsSingleton())
-                UpdateFrame?.Invoke(e.Time);
+            {
+                StartFrame?.Invoke();
+                StartFrame = (DelegateWindow)Delegate.RemoveAll(StartFrame, StartFrame);
+                UpdateFrame?.Invoke();
+            }
         }
 
         public void OnRenderFrame(FrameEventArgs e)
         {
             if (IsSingleton())
-                RenderFrame?.Invoke(e.Time);
+                RenderFrame?.Invoke();
         }
 
         public void OnClosing()

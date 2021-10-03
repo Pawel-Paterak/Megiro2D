@@ -18,11 +18,12 @@ namespace DebugConsole
             Renderer renderer = AddComponent<Renderer>();
             renderer.Color = Color.Green;
             renderer.Mesh = Mesh.Plane();
+            renderer.Texture = EngineResources.LoadTexture("ground.png");
 
             transform.Scale = new Vector3(100, 1, 100);
         }
 
-        public override void Update(double time)
+        public override void Update()
         {
 
         }

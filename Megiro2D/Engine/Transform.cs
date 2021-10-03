@@ -14,22 +14,30 @@ namespace Megiro2D.Engine
                 position = value;
             }
         }
+        public Vector3 Forward { get => GetForward(); }
+        public Vector3 Top { get => GetTop(); }
+        public Vector3 Left { get => GetLeft(); }
         public Vector3 LocalPosition { get => GetLocalPosition(); }
-        public Vector3 Rotation {
-            get => rotation;
+
+        public Vector3 EulerAngles
+        {
+            get => eulerAngles;
             set
             {
-                rotation.X = SetRotation(value.X);
-                rotation.Y = SetRotation(value.Y);
-                rotation.Z = SetRotation(value.Z);
+                eulerAngles.X = SetRotation(value.X);
+                eulerAngles.Y = SetRotation(value.Y);
+                eulerAngles.Z = SetRotation(value.Z);
+                SetChildsRotation(eulerAngles);
             }
         }
+        public Vector3 LocalEulerAngels { get => GetLocalEulerAngles(); }
+
         public Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
         public int ChildCount { get => childs.Count; }
         public Transform Parent { get => parent; set => SetParent(value); }
 
         private Vector3 position = new Vector3();
-        private Vector3 rotation = new Vector3();
+        private Vector3 eulerAngles = new Vector3();
         private List<Transform> childs = new List<Transform>();
         private Transform parent;
 
@@ -58,7 +66,12 @@ namespace Megiro2D.Engine
             return null;
         }
 
-        public void SetChildsPosition(Vector3 position)
+        public void Translate(Vector3 offset)
+        {
+            Position += offset;
+        }
+
+        private void SetChildsPosition(Vector3 position)
         {
             Vector3 offset = Position - position;
 
@@ -71,8 +84,59 @@ namespace Megiro2D.Engine
             }
         }
 
+        private void SetChildsRotation(Vector3 eulerAngles)
+        {
+            Vector3 offset = EulerAngles - eulerAngles;
+
+            foreach (var child in childs)
+            {
+                if (child != null)
+                    child.EulerAngles -= offset;
+                else
+                    childs.Remove(child);
+            }
+        }
+
+        private Vector3 GetForward()
+        {
+            double division = (360 / MathHelper.TwoPi);
+            float cosX = (float)Math.Cos(eulerAngles.X / division);
+            float sinX = (float)Math.Sin(eulerAngles.X / division);
+
+            float cosY = (float)Math.Cos(eulerAngles.Y / division);
+            float sinY = (float)Math.Sin(eulerAngles.Y / division);
+
+            return new Vector3(-sinY, sinX, -cosY * cosX);
+        }
+
+        private Vector3 GetTop()
+        {
+            double division = (360 / MathHelper.TwoPi);
+            float cosX = (float)Math.Cos(eulerAngles.X / division);
+            float sinX = (float)Math.Sin(eulerAngles.X / division);
+
+            float cosZ = (float)Math.Cos(eulerAngles.Z / division);
+            float sinZ = (float)Math.Sin(eulerAngles.Z / division);
+
+            //return new Vector3(0, cosX, sinX);//sinZ , -cosZ * cosX, -sinX
+            //return new Vector3(-sinZ, cosZ, 0);
+            return new Vector3(-sinZ, cosZ * cosX, sinX);
+        }
+
+        private Vector3 GetLeft()
+        {
+            double division = (360 / MathHelper.TwoPi);
+            float cosZ = (float)Math.Cos(eulerAngles.Z / division);
+            float sinZ = (float)Math.Sin(eulerAngles.Z / division);
+
+            float cosY = (float)Math.Cos(eulerAngles.Y / division);
+            float sinY = (float)Math.Sin(eulerAngles.Y / division);
+
+            return new Vector3(sinY, -sinZ, cosY * cosZ);
+        }
+
         private float SetRotation(float axis)
-         => axis % 360;
+            => axis % 360;
 
         private void AddChild(Transform child)
          => childs.Add(child);
@@ -82,6 +146,13 @@ namespace Megiro2D.Engine
             if (parent == null)
                 return Position;
             return parent.LocalPosition - Position;
+        }
+
+        private Vector3 GetLocalEulerAngles()
+        {
+            if (parent == null)
+                return EulerAngles;
+            return parent.LocalEulerAngels - EulerAngles;
         }
     }
 }

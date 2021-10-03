@@ -29,31 +29,32 @@ namespace Megiro2D.Render
             Coords2d[2] = new Vector2(1, 1);
             Coords2d[3] = new Vector2(0, 1);
 
+            //Back
             VerticesNumber[0] = 1;
             VerticesNumber[1] = 2;
             VerticesNumber[2] = 3;
             VerticesNumber[3] = 0;
-
+            //Bottom
             VerticesNumber[4] = 0;
             VerticesNumber[5] = 3;
             VerticesNumber[6] = 4;
             VerticesNumber[7] = 5;
-
+            //Left
             VerticesNumber[8] = 6;
             VerticesNumber[9] = 1;
             VerticesNumber[10] = 0;
             VerticesNumber[11] = 5;
-
+            //Front
             VerticesNumber[12] = 7;
             VerticesNumber[13] = 6;
             VerticesNumber[14] = 5;
             VerticesNumber[15] = 4;
-
+            //Top
             VerticesNumber[16] = 7;
             VerticesNumber[17] = 2;
             VerticesNumber[18] = 1;
             VerticesNumber[19] = 6;
-
+            //Right
             VerticesNumber[20] = 2;
             VerticesNumber[21] = 7;
             VerticesNumber[22] = 4;

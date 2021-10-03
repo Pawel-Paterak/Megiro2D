@@ -20,16 +20,6 @@ namespace Megiro2D
                 Initialize();
         }
 
-        public virtual void Start()
-        {
-
-        }
-
-        public virtual void Update(double time)
-        {
-
-        }
-
         public GameObject Instantiate(Vector3 position, Vector3 rotation)
             => Instantiate(position, rotation, null);
 
@@ -37,7 +27,7 @@ namespace Megiro2D
         {
             GameObject gameobject = new GameObject();
             gameobject.transform.Position = position;
-            gameobject.transform.Rotation = rotation;
+            gameobject.transform.EulerAngles = rotation;
             gameobject.transform.Parent = parent;
             return gameobject;
         }

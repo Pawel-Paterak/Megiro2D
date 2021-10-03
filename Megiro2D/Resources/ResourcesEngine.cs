@@ -39,7 +39,7 @@ namespace Megiro2D.Resources
 
                     return new Texture2D(id, bmp.Width, bmp.Height);
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     throw new Exception("you must call this method in RenderFrame");
                 }

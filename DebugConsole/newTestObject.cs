@@ -12,93 +12,163 @@ namespace DebugConsole
 {
     public class newTestObject : MegiroBehaviour
     {
-        private List<GameObject> gameObjects = new List<GameObject>();
-        private GameObject camera;
+        public GameObject camera;
+        private float sensivity = 0.1f;
+        float rotateSpeed = 40;
 
         public override void Start()
         {
             Name = "newTestObject";
             transform.Position = new Vector3(0, 2, 0);
+
             AddComponent<Renderer>();
-            camera = Instantiate(transform.Position + new Vector3(0, 0, 10), new Vector3(0, 0, 0), transform);
-            camera.AddComponent<Camera>();
-        }
-
-        public override void Update(double time)
-        {
-            if(Input.KeyPress(OpenTK.Input.Key.L))
-            {
-                MessageBox.Show("clicked L");
-            }
-
-            if (Input.KeyRelease(OpenTK.Input.Key.K))
-            {
-                MessageBox.Show("clicked K");
-
-            }
-
-            Move(time);
             if (renderer.Texture == null)
                 renderer.Texture = EngineResources.LoadTexture("Default.png");
+
+            camera = Instantiate(transform.Position + new Vector3(0, 0, 10), new Vector3(0, 0, 0), transform);
+            camera.AddComponent<Camera>();
+            NewMesh();
         }
 
-        private void Move(double time)
+        private void NewMesh()
         {
-            PlayerMove(time);
-            CameraMove(time);
+            Mesh mesh = new Mesh();
+            mesh.Coords2d = new Vector2[4];
+            mesh.Coords2d[0] = new Vector2(0, 0);
+            mesh.Coords2d[1] = new Vector2(1, 0);
+            mesh.Coords2d[2] = new Vector2(1, 1);
+            mesh.Coords2d[3] = new Vector2(0, 1);
+
+            mesh.Vertices = new Vector3[8];
+            mesh.Vertices[0] = new Vector3(0, 1, 5);
+            mesh.Vertices[1] = new Vector3(0, 1, -5);
+            mesh.Vertices[2] = new Vector3(0, -1, 5);
+            mesh.Vertices[3] = new Vector3(0, -1, -5);
+
+            mesh.Vertices[4] = new Vector3(1, 0, 5);
+            mesh.Vertices[5] = new Vector3(1, 0, -5);
+            mesh.Vertices[6] = new Vector3(-1, 0, 5);
+            mesh.Vertices[7] = new Vector3(-1, 0, -5);
+
+
+            mesh.VerticesNumber = new int[8];
+            mesh.VerticesNumber[0] = 4;
+            mesh.VerticesNumber[1] = 5;
+            mesh.VerticesNumber[2] = 7;
+            mesh.VerticesNumber[3] = 6;
+
+            mesh.VerticesNumber[4] = 0;
+            mesh.VerticesNumber[5] = 1;
+            mesh.VerticesNumber[6] = 3;
+            mesh.VerticesNumber[7] = 2;
+
+            renderer.Mesh = mesh;
         }
 
-        private void PlayerMove(double time)
+        public override void Update()
+        {
+            transform.EulerAngles += new Vector3(-Input.MousePosition.Y * sensivity, -Input.MousePosition.X * sensivity, 0);
+           // transform.EulerAngles = new Vector3(transform.EulerAngles.X, transform.EulerAngles.Y, 0);
+            //transform.EulerAngles += new Vector3(-Input.MousePosition.Y * sensivity, -Input.MousePosition.X * sensivity, 0);
+            Move();
+
+
+            if (Input.KeyPress(OpenTK.Input.Key.KeypadPlus))
+                rotateSpeed += 10;
+
+            if (Input.KeyPress(OpenTK.Input.Key.KeypadMinus))
+                rotateSpeed -= 10;
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad7))
+                transform.EulerAngles += new Vector3(rotateSpeed * Time.DeltaTime, 0, 0);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad4))
+                transform.EulerAngles = transform.EulerAngles * new Vector3(0, 1, 1);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad1))
+                transform.EulerAngles += new Vector3(-rotateSpeed * Time.DeltaTime, 0, 0);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad8))
+                transform.EulerAngles += new Vector3(0, rotateSpeed * Time.DeltaTime, 0);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad5))
+                transform.EulerAngles = transform.EulerAngles * new Vector3(1, 0, 1);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad2))
+                transform.EulerAngles += new Vector3(0, -rotateSpeed * Time.DeltaTime, 0);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad9))
+                transform.EulerAngles += new Vector3(0, 0, rotateSpeed * Time.DeltaTime);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad6))
+                transform.EulerAngles = transform.EulerAngles * new Vector3(1, 1, 0);
+
+            if (Input.KeyDown(OpenTK.Input.Key.Keypad3))
+                transform.EulerAngles += new Vector3(0, 0, -rotateSpeed * Time.DeltaTime);
+        }
+
+        private void Move()
+        {
+            PlayerMove();
+            CameraMove();
+        }
+
+        private void PlayerMove()
         {
             Vector3 offset = new Vector3();
             if (Input.KeyDown(OpenTK.Input.Key.W))
-                offset += new Vector3(0, 0, -10 * (float)time);
+                offset += transform.Forward * 5 * Time.DeltaTime;
 
             if (Input.KeyDown(OpenTK.Input.Key.S))
-                offset += new Vector3(0, 0, 10 * (float)time);
+                offset += -transform.Forward * 5 * Time.DeltaTime;
 
             if (Input.KeyDown(OpenTK.Input.Key.A))
-                offset += new Vector3(-10 * (float)time, 0, 0);
+                offset += transform.Left * 5 * Time.DeltaTime;
 
             if (Input.KeyDown(OpenTK.Input.Key.D))
-                offset += new Vector3(10 * (float)time, 0, 0);
+                offset += -transform.Left * 5 * Time.DeltaTime;
 
             if (Input.KeyDown(OpenTK.Input.Key.Space))
-                offset += new Vector3(0, 10 * (float)time, 0);
+                offset += transform.Top * 5 * Time.DeltaTime;
 
             if (Input.KeyDown(OpenTK.Input.Key.ShiftLeft))
-                offset += new Vector3(0, -10 * (float)time, 0);
+                offset += -transform.Top * 5 * Time.DeltaTime;
+
+            if (Input.KeyDown(OpenTK.Input.Key.Z))
+                transform.EulerAngles += new Vector3(0, 90 * Time.DeltaTime, 0);
+            if (Input.KeyDown(OpenTK.Input.Key.X))
+                transform.EulerAngles += new Vector3(0, -90 * Time.DeltaTime, 0);
 
             transform.Position += offset;
         }
 
-        public void CameraMove(double time)
+        public void CameraMove()
         {
             Vector3 offset = new Vector3();
 
             if (Input.KeyDown(OpenTK.Input.Key.Q))
-                camera.transform.Rotation += new Vector3(0, -1 * (float)time, 0);
+                camera.transform.EulerAngles += new Vector3(0, -90 * Time.DeltaTime, 0);
 
             if (Input.KeyDown(OpenTK.Input.Key.E))
-                camera.transform.Rotation += new Vector3(0, 1 * (float)time, 0);
+                camera.transform.EulerAngles += new Vector3(0, 90 * Time.DeltaTime, 0);
 
             if (Input.KeyDown(OpenTK.Input.Key.Up))
-                offset += new Vector3(0, 0, -10 * (float)time);
+                offset += new Vector3(0, 0, -10 * Time.DeltaTime);
 
             if (Input.KeyDown(OpenTK.Input.Key.Down))
-                offset += new Vector3(0, 0, 10 * (float)time);
+                offset += new Vector3(0, 0, 10 * Time.DeltaTime);
 
             if (Input.KeyDown(OpenTK.Input.Key.Left))
-                offset += new Vector3(-10 * (float)time, 0, 0);
+                offset += new Vector3(-10 * Time.DeltaTime, 0, 0);
 
             if (Input.KeyDown(OpenTK.Input.Key.Right))
-                offset += new Vector3(10 * (float)time, 0, 0);
+                offset += new Vector3(10 * Time.DeltaTime, 0, 0);
 
             if (Input.KeyDown(OpenTK.Input.Key.ShiftRight))
-                offset += new Vector3(0, 10 * (float)time, 0);
+                offset += new Vector3(0, 10 * Time.DeltaTime, 0);
 
             if (Input.KeyDown(OpenTK.Input.Key.ControlRight))
-                offset += new Vector3(0, -10 * (float)time, 0);
+                offset += new Vector3(0, -10 * Time.DeltaTime, 0);
 
             if(camera != null)
                 camera.transform.Position += offset;

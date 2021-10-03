@@ -25,7 +25,7 @@ namespace Megiro2D
 
             WindowController.Singleton.OnLoad(e);
 
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(Color.LightBlue);
         }
 
         protected override void OnResize(EventArgs e)
@@ -43,9 +43,14 @@ namespace Megiro2D
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            base.OnUpdateFrame(e);
+            Time.DeltaTime = (float)e.Time * Time.TimeScale;
 
+            base.OnUpdateFrame(e);
+            
             WindowController.Singleton.OnUpdateFrame(e);
+
+            if (Input.KeyPress(Key.Escape))
+                Exit();
 
             Input.Update();
         }

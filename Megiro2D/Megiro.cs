@@ -10,7 +10,8 @@ namespace Megiro2D
         public static Megiro Singleton;
 
         private Window window;
-        public readonly List<Component> behaviours = new List<Component>();
+        private MegiroCollider megiroCollider = new MegiroCollider();
+        private List<MegiroBehaviour> behaviours = new List<MegiroBehaviour>();
 
         public Megiro()
         {
@@ -18,6 +19,8 @@ namespace Megiro2D
                 Singleton = this;
 
             new WindowController();
+
+            WindowController.Singleton.UpdateFrame += megiroCollider.Update;
         }
 
         public void Start(int width, int height, string title, double updateRatio)
@@ -35,22 +38,29 @@ namespace Megiro2D
         {
             behaviours.Add(behaviour);
 
-            behaviour.Start();
+            WindowController.Singleton.StartFrame += behaviour.Start;
             WindowController.Singleton.UpdateFrame += behaviour.Update;
         }
 
-        public void RemoveBehaviour(MegiroBehaviour component)
+        public void RemoveBehaviour(MegiroBehaviour behaviour)
         {
-            if (behaviours.Contains(component))
+            if (behaviours.Contains(behaviour))
             {
-                WindowController.Singleton.UpdateFrame -= component.Update;
-
-                Renderer renderer = component.renderer;
-                if (renderer != null)
-                    WindowController.Singleton.RenderFrame -= renderer.Render;
-
-                behaviours.Remove(component);
+                WindowController.Singleton.UpdateFrame -= behaviour.Update;
+                behaviours.Remove(behaviour);
             }
+        }
+
+        public void AddCollider(Collider collider)
+        {
+            if (collider != null)
+                megiroCollider.Colliders.Add(collider);
+        }
+
+        public void RemoveCollider(Collider collider)
+        {
+            if (collider != null)
+                megiroCollider.Colliders.Remove(collider);
         }
     }
 }

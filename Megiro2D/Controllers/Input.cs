@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Input;
 
@@ -10,7 +11,8 @@ namespace Megiro2D.Controllers
 {
     public class Input
     {
-        public Vector2 MousePosition { get => new Vector2(Mouse.GetCursorState().X, Mouse.GetCursorState().Y); }
+        public static Vector2 MousePosition { get; private set; }
+        public static int MouseWheel { get => Mouse.GetCursorState().Wheel; }
 
         private static List<Key> keysDown;
         private static List<Key> keysDownLast;
@@ -37,9 +39,7 @@ namespace Megiro2D.Controllers
         }
 
         private static void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            buttonsDown.Add(e.Button);
-        }
+           => buttonsDown.Add(e.Button);
 
         private static void Window_KeyUp(object sender, KeyboardKeyEventArgs e)
         {
@@ -48,14 +48,20 @@ namespace Megiro2D.Controllers
         }
 
         private static void Window_KeyDown(object sender, KeyboardKeyEventArgs e)
-        {
-            keysDown.Add(e.Key);
-        }
+           => keysDown.Add(e.Key);
 
         public static void Update()
         {
             keysDownLast = new List<Key>(keysDown);
             buttonsDownLast = new List<MouseButton>(buttonsDown);
+
+            Vector2 center = new Vector2(1920 / 2, 1080 / 2);
+            Vector2 mousePosition = new Vector2(Mouse.GetCursorState().X, Mouse.GetCursorState().Y);
+            if (mousePosition == center)
+                MousePosition = new Vector2(0, 0);
+            else
+                MousePosition = mousePosition - center;
+            Mouse.SetPosition(center.X, center.Y);
         }
 
         public static bool KeyPress(Key key)

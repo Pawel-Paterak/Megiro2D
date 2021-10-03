@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Megiro2D.Engine
 {
@@ -11,37 +12,63 @@ namespace Megiro2D.Engine
 
         public T AddComponent<T>() where T : Component
         {
-            Component component = null;
-            component = (T)Activator.CreateInstance(typeof(T));
+            Component component = Activator.CreateInstance(typeof(T)) as Component;
             component.gameObject = this;
+            component.OnComponentAdd();
             components.Add(component);
-
             return (T)component;
         }
 
         public Component AddComponent(Component component)
         {
-            component.gameObject = this;
-            components.Add(component);
-            return component;
+            if (component != null)
+            {
+                component.gameObject = this;
+                components.Add(component);
+                component.OnComponentAdd();
+                return component;
+            }
+            return null;
         }
 
         public T GetComponent<T>() where T : Component
         {
             foreach (Component component in components)
-                if (component is T)
-                    return component as T;
+                if (component != null)
+                {
+                    if (component is T)
+                        return component as T;
+                }
+                else
+                    components.Remove(component);
             return null;
         }
 
         public T[] GetComponents<T>() where T : Component
         {
-            List<Component> components = new List<Component>();
+            List<T> components = new List<T>();
             foreach (Component component in this.components)
-                if (component is T)
-                    components.Add(component);
+                if (component != null)
+                {
+                    if (component is T)
+                        components.Add(component as T);
+                }
+                else
+                    this.components.Remove(component);
+            return components.ToArray();
+        }
 
-            return components.ToArray() as T[];
+        public void RemoveComponent<T>() where T : Component
+        {
+            for (int i = 0; i < components.Count; i++)
+                if (components[i] is T)
+                    components.RemoveAt(i);
+        }
+
+        public void RemoveComponent(Component component)
+        {
+            if(components.Contains(component))
+                components.Remove(component);
         }
     }
 }

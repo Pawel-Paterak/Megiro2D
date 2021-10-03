@@ -1,4 +1,5 @@
 ﻿using Megiro2D;
+using Megiro2D.Engine;
 using Megiro2D.Render;
 using Megiro2D.Resources;
 using OpenTK;
@@ -13,18 +14,13 @@ namespace DebugConsole
         public override void Start()
         {
             Name = "TestObject";
+            Renderer renderer = GetComponent<Renderer>();
+            renderer.Texture = EngineResources.LoadTexture("GameIcon32x32.png");
         }
 
-        public override void Update(double time)
+        public override void Update()
         {
-            transform.Rotation += RotationSpeed * new Vector3(0, (float)time, 0);
-            if (renderer != null && renderer.Texture == null)
-                renderer.Texture = EngineResources.LoadTexture("GameIcon32x32.png");
-        }
-
-        public override void OnDestroy()
-        {
-            MessageBox.Show("Destroing: " +Name);
+            transform.EulerAngles += RotationSpeed * new Vector3(0, Time.DeltaTime, 0);
         }
     }
 }
